@@ -6,20 +6,31 @@ from project import Project
 
 class PPM:
     def __init__(self):
-        self.usages = {"Config": "ppm config <param> <value>", "Project Creation": "ppm create", "Help": "ppm help | ppm -h | ppm --help"}
+        self.usages = {
+            "Config": "ppm config <param> <value>", 
+            "Project Creation": "ppm create", 
+            "Project Info": "ppm info",
+            "Help": "ppm help | ppm -h | ppm --help"
+        }
         self.conf = Config()
-        if os.path.exists(".ppm"):
-            self.project = Project(os.getcwd())
+        if os.path.exists(os.path.join(os.getcwd(), ".ppm")):
+            self.project = Project(os.getcwd(), self.conf)
         else:
             self.project = None
         
     def create_project(self):
         if self.project is None:
             os.makedirs(".ppm")
-            self.project = Project(os.getcwd())
+            self.project = Project(os.getcwd(), self.conf)
             print("Project Created")
         else:
             print("Error : You are in a project.")
+    
+    def info_project(self):
+        if self.project is None:
+            print("Error : You aren't in a project.")
+        else:
+            print(self.project)
 
     def usage(self, type_ = None):
         if type_ is None or type_ not in self.usages.keys():
@@ -45,6 +56,8 @@ class PPM:
                 self.usage()
             elif sys.argv[1] == "create":
                 self.create_project()
+            elif sys.argv[1] == "info":
+                self.info_project()
             elif sys.argv[1] == "config":
                 self.show_config()
             else:
