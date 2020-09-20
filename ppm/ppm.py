@@ -10,6 +10,7 @@ class PPM:
             "Config": "ppm config <param> <value>", 
             "Project Creation": "ppm create", 
             "Project Info": "ppm info",
+            "Git Status": "ppm status",
             "Help": "ppm help | ppm -h | ppm --help"
         }
         self.conf = Config()
@@ -58,6 +59,11 @@ class PPM:
                 self.create_project()
             elif sys.argv[1] == "info":
                 self.info_project()
+            elif sys.argv[1] == "status":
+                if self.project.git is None:
+                    print("Git isn't use in this project")
+                else:
+                    self.project.git.status()
             elif sys.argv[1] == "config":
                 self.show_config()
             else:

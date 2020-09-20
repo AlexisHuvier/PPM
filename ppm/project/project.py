@@ -1,6 +1,8 @@
 import os
 import json
 
+from project.gitmanager import GitManager
+
 class Project:
     def __init__(self, directory, config):
         self.config = config
@@ -9,9 +11,14 @@ class Project:
         self.ppm_directory = os.path.join(directory, ".ppm")
         self.python_directory = None
         self.project_file = os.path.join(directory, ".ppm", "project.json")
+        if os.path.exists(".git"):
+            self.git = GitManager()
+        else:
+            self.git = None
         if os.path.exists(self.project_file):
             with open(self.project_file, "r") as f:
                 self.project_info = json.load(f)
+            self.python_directory = os.path.join(directory, self.project_info["name"])
         else:
             self.project_info = self.create()
             self.save()
@@ -33,6 +40,8 @@ class Project:
         description = input("Description : ")
         self.python_directory = os.path.join(self.directory, name.lower())
         os.makedirs(self.python_directory)
+        if self.config.get("git", False):
+            self.git = GitManager()
         with open(os.path.join(self.directory, "README.md"), "w") as f:
             f.write("# "+name+"\n\n"+description+"\n")
         with open(os.path.join(self.python_directory, "__init__.py"), "w") as f:
