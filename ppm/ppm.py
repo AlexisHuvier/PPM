@@ -10,6 +10,7 @@ class PPM:
             "Config": "ppm config [param] [value]", 
             "Project Creation": "ppm create", 
             "Project Info": "ppm info",
+            "Project Stats": "ppm stats",
             "Git Status": "ppm status",
             "Git Add": "ppm add <path|regex>",
             "Git Branch": "ppm branch [branch]",
@@ -29,12 +30,6 @@ class PPM:
             print("Project Created")
         else:
             print("Error : You are in a project.")
-    
-    def info_project(self):
-        if self.project is None:
-            print("Error : You aren't in a project.")
-        else:
-            print(self.project)
 
     def usage(self, type_ = None):
         if type_ is None or type_ not in self.usages.keys():
@@ -75,14 +70,23 @@ class PPM:
             elif sys.argv[1] == "create":
                 self.create_project()
             elif sys.argv[1] == "info":
-                self.info_project()
+                if self.verif_project():
+                    print(self.project)
+            elif sys.argv[1] == "stats":
+                if self.verif_project():
+                    print(self.project.analyser.run_stats())
             elif sys.argv[1] == "status":
-                if self.project.git is None:
-                    print("Git isn't use in this project")
-                else:
+                if self.verif_git():
                     self.project.git.status()
             elif sys.argv[1] == "config":
                 self.show_config()
+            elif sys.argv[1] == "add":
+                self.usage("Git Add")
+            elif sys.argv[1] == "commit":
+                self.usage("Git Commit")
+            elif sys.argv[1] == "branch":
+                if self.verif_git():
+                    self.project.git.branch()
             else:
                 self.usage()
         elif len(sys.argv) == 3:
