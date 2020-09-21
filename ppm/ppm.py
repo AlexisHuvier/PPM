@@ -7,7 +7,7 @@ from project import Project
 class PPM:
     def __init__(self):
         self.usages = {
-            "Config": "ppm config <param> <value>", 
+            "Config": "ppm config [param] [value]", 
             "Project Creation": "ppm create", 
             "Project Info": "ppm info",
             "Git Status": "ppm status",
@@ -70,7 +70,7 @@ class PPM:
         if len(sys.argv) == 1:
             self.usage()
         elif len(sys.argv) == 2:
-            if sys.argv[1] in ["help", "-h", "--help"]:
+            if sys.argv[1] == "help":
                 self.usage()
             elif sys.argv[1] == "create":
                 self.create_project()
