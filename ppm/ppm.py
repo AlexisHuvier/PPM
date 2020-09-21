@@ -11,7 +11,10 @@ class PPM:
             "Project Creation": "ppm create", 
             "Project Info": "ppm info",
             "Git Status": "ppm status",
-            "Help": "ppm help | ppm -h | ppm --help"
+            "Git Add": "ppm add <path|regex>",
+            "Git Branch": "ppm branch [branch]",
+            "Git Commit": "ppm commit <message>",
+            "Help": "ppm help"
         }
         self.conf = Config()
         if os.path.exists(os.path.join(os.getcwd(), ".ppm")):
@@ -49,6 +52,20 @@ class PPM:
         else:
             print(key, ":", self.conf.get(key, None))
 
+    def verif_project(self):
+        if self.project is None:
+            print("Error : You aren't in a project")
+            return False
+        return True
+    
+    def verif_git(self):
+        if self.verif_project():
+            if self.project.git is None:
+                print("Git isn't use in this project")
+                return False
+            return True
+        return False
+
     def run(self):
         if len(sys.argv) == 1:
             self.usage()
@@ -74,6 +91,15 @@ class PPM:
                     self.show_config(sys.argv[2])
                 else:
                     print("Config : Unknown value")
+            elif sys.argv[1] == "add":
+                if self.verif_git():
+                    self.project.git.add(sys.argv[2])
+            elif sys.argv[1] == "branch":
+                if self.verif_git():
+                    self.project.git.branch(sys.argv[2])
+            elif sys.argv[1] == "commit":
+                if self.verif_git():
+                    self.project.git.commit(sys.argv[2])
             else:
                 self.usage() 
         elif len(sys.argv) == 4:
