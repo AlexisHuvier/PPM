@@ -2,6 +2,7 @@ import os
 import json
 
 from project.gitmanager import GitManager
+from project.analyser import Analyser
 
 class Project:
     def __init__(self, directory, config):
@@ -11,6 +12,7 @@ class Project:
         self.ppm_directory = os.path.join(directory, ".ppm")
         self.python_directory = None
         self.project_file = os.path.join(directory, ".ppm", "project.json")
+        self.analyser = Analyser(self)
         if os.path.exists(".git"):
             self.git = GitManager()
         else:
