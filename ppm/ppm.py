@@ -116,8 +116,12 @@ class PPM:
                 self.usage()
         else:
             self.usage()
+
+
+def launch():
+    ppm = PPM()
+    ppm.run()
             
 
 if __name__ == "__main__":
-    ppm = PPM()
-    ppm.run()
+    launch()
